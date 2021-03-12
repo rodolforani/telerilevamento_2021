@@ -1,0 +1,14 @@
+# My first code in R for remote sensing.
+
+# Creazione della cartella di lavoro (set working directory) attraverso la funzione 'setwd':
+setwd("C:/lab/") # for windows
+# Importare dati raster da lab dentro a R associandoli direttamente ad una variabile(nome)
+# si utilizza la funzione brick all'intenro del pacchetto raster
+
+# install.packages("raster")
+library(raster) # NO virgolette perché raster già dentro R con install.packages
+p224r63_2011 <- brick("p224r63_2011_masked")
+# Per avere le informazioni (dimensioni, tipo, ...) del dato appena caricato basta scriverlo
+p224r63_2011
+# Graficare l'immagine appena caricata in p224r63_2011
+plot(p224r63_2011)
