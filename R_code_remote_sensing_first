@@ -1,14 +1,23 @@
 # My first code in R for remote sensing.
 
+# Installare il pacchetto raster di R (esterno a R quindi argomento tra virgolette), funzione per installare è install.packages.
+install.packages("raster")
+# Utilizzo del pacchetto raster con le funzioni annesse possibile caricandolo con la funzione library (loading, attaching and listing of packages).
+library(raster) # NO virgolette perché raster già dentro R con install.packages
+
 # Creazione della cartella di lavoro (set working directory) attraverso la funzione 'setwd':
 setwd("C:/lab/") # for windows
-# Importare dati raster da lab dentro a R associandoli direttamente ad una variabile(nome)
-# si utilizza la funzione brick all'intenro del pacchetto raster
-
-# install.packages("raster")
-library(raster) # NO virgolette perché raster già dentro R con install.packages
+# Importare dati raster da lab dentro a R associandoli direttamente ad una variabile(nome), si utilizza la funzione brick all'intenro del pacchetto raster.
 p224r63_2011 <- brick("p224r63_2011_masked")
 # Per avere le informazioni (dimensioni, tipo, ...) del dato appena caricato basta scriverlo
 p224r63_2011
 # Graficare l'immagine appena caricata in p224r63_2011
 plot(p224r63_2011)
+# Cambio la scala dei colori (scala di grigi per tutte le bande)
+# funzione colorRampPalette (vettore colori) e scala (n.livelli)=100 fuori dalla parentesi funzione.
+cl1 <- colorRampPalette(c("black","gray","light gray"))(200)
+# Rigrafichiamo l'immagine con i colori cl, inserendo in plot col(colore)=cl
+plot(p224r63_2011, col=cl1)
+# Scala colori diversa 2
+cl2 <- colorRampPalette(c("black","purple","light blue","green","yellow","orange","red","white")) (200)
+plot(p224r63_2011, col=cl2)
