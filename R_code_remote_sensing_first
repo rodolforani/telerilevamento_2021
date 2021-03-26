@@ -58,3 +58,22 @@ plot(p224r63_2011$B2_sre, col=clg)
 plot(p224r63_2011$B3_sre, col=clr)
 plot(p224r63_2011$B4_sre, col=clnir)
 
+# visuallizzazione immagini in RGB ossia colori naturali visibili
+# utilizza la funzione plotRGB che utilizza immagini multi-layer
+# associa ogni banda (1,2,3) allo schema rgb, più meccanismo di stretch="Lineare" 
+# che "stende" "allunga" il range colori di ogni banda così da aver una sfumatura maggiore.
+par(mfrow=c(2,2))
+plotRGB(p224r63_2011,r=3,g=2,b=1,stretch="Lin") # colori naturali
+plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin") # nir nel rosso
+plotRGB(p224r63_2011,r=3,g=4,b=1,stretch="Lin") # nir nel verde
+plotRGB(p224r63_2011,r=3,g=2,b=4,stretch="Lin") # nir nel blu
+
+par(mfrow=c(2,2))
+plotRGB(p224r63_2011,r=3,g=2,b=1,stretch="Lin") # colori naturali stretch lineare
+plotRGB(p224r63_2011,r=3,g=2,b=1,stretch="Hist") # colori naturali stretch histogram
+plotRGB(p224r63_2011,r=3,g=4,b=1,stretch="Lin") # nir nel verde stretch lineare
+plotRGB(p224r63_2011,r=3,g=4,b=1,stretch="Hist") # nir nel verde stretch histogram
+
+
+
+
