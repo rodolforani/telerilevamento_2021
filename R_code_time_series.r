@@ -8,4 +8,4 @@ library(raster)
 library(rasterVis)
 
 #settiamo la cartella di lavoro:
-setwed(C:/lab/Greenland)
+setwd("C:/lab/Greenland")
