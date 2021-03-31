@@ -74,6 +74,25 @@ plotRGB(p224r63_2011,r=3,g=2,b=1,stretch="Hist") # colori naturali stretch histo
 plotRGB(p224r63_2011,r=3,g=4,b=1,stretch="Lin") # nir nel verde stretch lineare
 plotRGB(p224r63_2011,r=3,g=4,b=1,stretch="Hist") # nir nel verde stretch histogram
 
+#importo l'immagine della stezza zona dell'anno 1988.
+p224r63_1988 <- brick("p224r63_1988_masked.grd")
+p224r63_1988
+plot(p224r63_1988)
+# visualizzo l'immgine a colori naturali:
+plotRGB(p224r63_1988,r=3,g=2,b=1,stretch="Lin")
+# Associo infrarosso al colore red
+plotRGB(p224r63_1988,r=4,g=3,b=2,stretch="Lin")
+
+#Confronto foto 1988 con 2011 nella stessa finestra con immagini con NIR nella componente red
+par(mfrow=c(2,1))
+plotRGB(p224r63_1988,r=4,g=3,b=2,stretch="Lin")
+plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
+#uguale con stretch Histogram a confronto con lineare:
+par(mfrow=c(2,2))
+plotRGB(p224r63_1988,r=4,g=3,b=2,stretch="Lin")
+plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
+plotRGB(p224r63_1988,r=4,g=3,b=2,stretch="Hist")
+plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Hist")
 
 
 
