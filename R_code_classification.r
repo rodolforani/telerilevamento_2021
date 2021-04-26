@@ -14,8 +14,7 @@ so
 #visualizzazione livelli con schema RGB colori naturali utilizzando tutti i pixel con stretch lineare
 plotRGB(so, 1,2,3, stretch="lin")
 
-set.seed(3)
-# classificazione non supervisionata dall'utente, ossia il software effettua il training set da solo basandosi sul numero di classi scelto da noi.
+# classificazione non supervisionata dall'utente, ossia il software effettua il training sete da solo basandosi sul numero di classi scelto da noi.
 soc3 <- unsuperClass(so, nClasses = 3)
 # visualizzare la mappa creata ma esplicitando di plottare la parte "map" di soc,
 # perchè in soc sono contenute più informazione; mappa e il modello da cui si è costruito le classi
@@ -32,3 +31,21 @@ plotRGB(sun, 1,2,3, stretch="lin")
 
 sunc <- unsuperClass(sun, nClasses = 20)
 plot(sunc$map)
+
+# CLASSIFICAZIONE GRAND CANION
+# carico l'immagine con brick
+gc <- brick("dolansprings_oli_2013088_canyon_lrg.jpg")
+gc # info immogine
+# graficare la foto in colori naturali 
+plotRGB(gc, r=1,g=2,b=3, stretch="lin")
+plotRGB(gc, r=1,g=2,b=3, stretch="hist")
+# uno stretch differente produce colori diversi che sono utili per risaltare certe informazioni,
+# lo stretch Histogram produce una mappa che sembrain 3D, si intuiscono meglio le morfologie.
+
+#Classificazione non supervisionata in 2 classi:
+gcc <- unsuperClass(gc, nClasses = 4)
+plot(gcc$map)
+# Visualizzo immagine a colori naturali con immagine classificata per conffronto diretto
+par(mfrow=c(2,1))
+plotRGB(gc, r=1,g=2,b=3, stretch="hist")
+plot(gcc$map)
