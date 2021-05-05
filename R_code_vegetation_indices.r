@@ -3,6 +3,8 @@
 # serve il pacchetto raster
 library(raster)
 library(RStoolbox)
+library(rasterdiv)
+library(rasterVis)
 
 # impostare la cartella di lavoro
 setwd("C:/lab/")
@@ -70,3 +72,13 @@ vi1 <- spectralIndices(defor1, green = 3, red = 2, nir = 1)
 plot(vi1, col=cl)
 vi2 <- spectralIndices(defor2, green = 3, red = 2, nir = 1)
 plot(vi1, col=cl)
+
+# RASTERDIV: worldwide ndvi
+plot(copNDVI)
+#Togliere l'acqua, pixel con valore 253,254,255 li impostiamo come NA.
+#perhe riflettanza massima è data dall'acqua, eliminarla per migliorare la visualizzazione del resto.
+copNDVI <- reclassify(copNDVI, cbind(253:255,NA))
+plot(copNDVI)
+
+# serve rasterVis:
+levelplot(copNDVI)
