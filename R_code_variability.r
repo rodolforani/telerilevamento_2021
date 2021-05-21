@@ -3,6 +3,10 @@
 #Pacchetti richiesti:
 library(raster)
 library(RStoolbox)
+install.packages("viridis") # for ggplot colouring
+library(ggplot2) # for plotting ggplot
+library(gridExtra) # for plotting ggplot toghether
+library(viridis)
 #Imposto la cartella di lavoro
 setwd("C:/lab/")
 
@@ -50,3 +54,15 @@ plot(sentpca$map)
 sentpca #informazioni
 summary(sentpca$model) # quanta variabilità spiegnao le componenti (assi)
 # pc1=77.33 %, pc2=53.51 %, pc3=5.77 %, pc4=0 %.
+pc1 <- sentpca$map$PC1
+pc1sd <- focal(pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+clsd <- colorRampPalette(c("blue","green","pink","magenta","orange","brown","red","yellow"))(100)
+plot(pc1sd, col=clsd)
+# Colore omogeneo blu rappresenta le valli o praterie di alta quota, in cui si ha appunto una certa omogeneità nel terreno (meno variabilità)
+# Metre i colori rossi rappresentano le zone con più variabilità, ossia crepacci e sone in roccia diversificate.
+
+# Come richiamare pezzi di codice già scritti senza dover copiare e incollare.
+source("source_test_lezione.r") #dev.st. 7x7 di pc1
+
+# Plot con ggplot, utilizzando una sorgente
+source("source_ggplot.r")
