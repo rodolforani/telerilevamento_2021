@@ -60,9 +60,36 @@ clsd <- colorRampPalette(c("blue","green","pink","magenta","orange","brown","red
 plot(pc1sd, col=clsd)
 # Colore omogeneo blu rappresenta le valli o praterie di alta quota, in cui si ha appunto una certa omogeneità nel terreno (meno variabilità)
 # Metre i colori rossi rappresentano le zone con più variabilità, ossia crepacci e sone in roccia diversificate.
+# Macchia blu in alto a sinistra è una nuvola, per quello così omogeneo
 
 # Come richiamare pezzi di codice già scritti senza dover copiare e incollare.
 source("source_test_lezione.r") #dev.st. 7x7 di pc1
 
 # Plot con ggplot, utilizzando una sorgente
 source("source_ggplot.r")
+
+# Contenuto del source applicato ai miei dati:
+pviridis <- ggplot() + #crea una nuova finestra vuota
+  geom_raster(pc1sd, mapping = aes(x=x, y=y, fill=layer)) + # crea la geometria a griglia di pixel(raster) e la mappa con le aesthetics inserite da noi
+  scale_fill_viridis() + #Utilizza la legenda (color palette) già preparata, di default utilizza quella "viridis".
+  ggtitle("Dev. St. of pc1 by viridis colour scale") #Titolo immagine
+
+# Utiliziamo un altra legenda (colour scale)
+pturbo <- ggplot() + 
+  geom_raster(pc1sd, mapping = aes(x=x, y=y, fill=layer)) + 
+  scale_fill_viridis(option = "turbo") +
+  ggtitle("Dev. St. of pc1 by turbo colour scale") #ATTENZIONE trae in inganno il colore giallo che spicca ma in realtà è a metà dei vaolori in legenda.
+
+pplasma <- ggplot() + 
+  geom_raster(pc1sd, mapping = aes(x=x, y=y, fill=layer)) + 
+  scale_fill_viridis(option = "plasma") +
+  ggtitle("Dev. St. of pc1 by plasma colour scale")
+
+pmagma <- ggplot() + 
+  geom_raster(pc1sd, mapping = aes(x=x, y=y, fill=layer)) + 
+  scale_fill_viridis(option = "magma") +
+  ggtitle("Dev. St. of pc1 by magma colour scale")
+
+
+#Plottiamo insieme tutte le possibili legende che vogliamo, con grid.arrange utilizzando gli oggetti a cui abbiamo associato le mappe precedenti di viridis
+grid.arrange(pviridis, pplasma, pmagma, pturbo, nrow=2, ncol=2)
