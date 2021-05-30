@@ -14,7 +14,7 @@ setwd("C:/lab/Esame")
 # associo la lista al nome rlist
 listemilia <- list.files(pattern="eT32TPQ_20210528T100559")
 listemilia
-listtoscana <- list.files(pattern="r_")
+listtoscana <- list.files(pattern="tT32TPP_20210528T100559")
 listtoscana
 # ora applico la funzione raster alla lista con la funzione lapply
 # lapplay necessita della lista di dati su cui vogliamo applicare la funzione, che scriviamo dopo la virgola (listadati,funzione) 
@@ -32,8 +32,8 @@ plot(emilia2021$eT32TPQ_20210528T100559_WVP_10m)
 plotRGB(emilia2021, 4, 3, 2, stretch="lin") # colori naturali
 toscana2021 <- stack(importtoscana)
 toscana2021
-plot(toscana2021$r_TCI_10m)
-plotRGB(toscana2021, 4, 3, 2, stretch="lin") # colori naturali
+plot(toscana2021)
+plotRGB(toscana2021,4, 3, 2, stretch="lin") # colori naturali
 
 # BANDE:
 # B2=blu
@@ -42,5 +42,23 @@ plotRGB(toscana2021, 4, 3, 2, stretch="lin") # colori naturali
 # B8=near infrared
 # AOT=aerosol optical thickness
 # WVP=water colour images
+
+# Analisi multivariata (PCA)
+
+emiliarid <- aggregate(emilia2021, fact=5) # Aggrego i pixel di un fattore 5, quindi diventeranno pixel di 100x100 metri, per velocizzare i calcoli.
+emiliarid
+plotRGB(emiliarid, 4, 3, 2, stretch="Lin")
+emiliapca <- rasterPCA(emiliarid)
+plot(emiliapca$map)
+emiliapca #informazioni
+summary(emiliapca$model)
+
+toscanarid <- aggregate(toscana2021, fact=5)
+toscanarid
+plotRGB(toscanarid, 4, 3, 2, stretch="Lin")
+toscanapca <- rasterPCA(toscanarid)
+plot(toscanapca$map)
+toscanapca #informazioni
+summary(toscanapca$model)
 
 
