@@ -52,6 +52,7 @@ emiliapca <- rasterPCA(emiliarid)
 plot(emiliapca$map)
 emiliapca #informazioni
 summary(emiliapca$model)
+# pc1=75.5% pc2=22% pc3=0.02% ... pc7
 
 toscanarid <- aggregate(toscana2021, fact=5)
 toscanarid
@@ -60,5 +61,14 @@ toscanapca <- rasterPCA(toscanarid)
 plot(toscanapca$map)
 toscanapca #informazioni
 summary(toscanapca$model)
+# pc1=85.6% pc2=13.4% pc3=0.006% ... pc7
 
+# Variabilità spaziale sulla componente principale della pca (deviazione standard)
 
+emiliapc1 <- emiliapca$map$PC1
+emiliasd <- focal(emiliapc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+
+pviridis <- ggplot() + #crea una nuova finestra vuota
+  geom_raster(emiliasd, mapping = aes(x=x, y=y, fill=layer)) + # crea la geometria a griglia di pixel(raster) e la mappa con le aesthetics inserite da noi
+  scale_fill_viridis() + #Utilizza la legenda (color palette) già preparata, di default utilizza quella "viridis".
+  ggtitle("Dev. St. of pc1 by viridis colour scale") #Titolo immagine
