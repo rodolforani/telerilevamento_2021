@@ -28,11 +28,9 @@ importtoscana
 # salvo tutto con un nome file TGr
 emilia2021 <- stack(importemilia)
 emilia2021
-plot(emilia2021$emilia20m_TCI)
-plotRGB(emilia2021, 4, 3, 2, stretch="lin") # colori naturali
+plotRGB(emilia2021, 4, 3, 2, stretch="Lin") # colori naturali
 toscana2021 <- stack(importtoscana)
 toscana2021
-plot(toscana2021)
 plotRGB(toscana2021,4, 3, 2, stretch="lin") # colori naturali
 
 # BANDE:
@@ -53,22 +51,21 @@ plotRGB(toscana2021,4, 3, 2, stretch="lin") # colori naturali
 emiliaNA <- emilia2021$emilia20m_B04 > 3000
 plot(emiliaNA)
 emiliamask <- mask(emilia2021, emiliaNA, maskvalue=TRUE)
-plot(emiliamask)
+plot(emiliamask$emilia20m_TCI)
 
 toscanaNA <- toscana2021$tosc20m_B04 > 3000
 plot(toscanaNA)
 toscanamask <- mask(toscana2021, toscanaNA, maskvalue=TRUE)
-plot(toscanamask)
+plot(toscanamask$tosc20m_B04)
 
 # NDSI (normalised difference snow index)  ?? LO TNEGO ?? A COSA MI PUò SERVIRE ????
 
-emiliaNDSI <- ((emiliamask$emilia20m_B03-emiliamask$emilia20m_B11)/(emiliamask$emilia20m_B03+emiliamask$emilia20m_B11))
-par(mfrow=c(1,2))
-plot(emiliaNDSI)
-plot(emiliamask$emilia20m_B04)
+#emiliaNDSI <- ((emiliamask$emilia20m_B03-emiliamask$emilia20m_B11)/(emiliamask$emilia20m_B03+emiliamask$emilia20m_B11))
+#par(mfrow=c(1,2))
+#plot(emiliaNDSI)
 
-emiliacloudy <- emiliaNDSI*emiliamask$emilia20m_B04
-plot(emiliacloudy)
+#emiliacloudy <- emiliaNDSI*emiliamask$emilia20m_B04
+#plot(emiliacloudy)
 
 # Analisi multivariata (PCA)
 
@@ -110,3 +107,47 @@ toscanasd <- focal(toscanapc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 
 levelplot(emiliasd)
 levelplot(toscanasd)
+
+# NDVI (Normalised difference vegetation index)
+
+emiliaNDVI <- ((emiliamask$emilia20m_B8A-emiliamask$emilia20m_B04)/(emiliamask$emilia20m_B8A+emiliamask$emilia20m_B04))
+levelplot(emiliaNDVI)
+
+toscanaNDVI <- ((toscanamask$tosc20m_B8A-toscanamask$tosc20m_B04)/(toscanamask$tosc20m_B8A+toscanamask$tosc20m_B04))
+levelplot(toscanaNDVI)
+
+# Senescing Vegetation normalised (vegetazione invecchiata o malata, poco produttiva di clorofilla)
+# Banda 3 (green) riflette meno nella vegetazione vecchia o malata, per cui valori più alti di Senescing Vegetation indicano una pianta più vecchia.
+
+emiliaSENVEG <- ((emiliamask$emilia20m_B8A-emiliamask$emilia20m_B03)/(emiliamask$emilia20m_B8A+emiliamask$emilia20m_B03))
+levelplot(emiliaSENVEG)
+
+toscanaSENVEG <- ((toscanamask$tosc20m_B8A-toscanamask$tosc20m_B03)/(toscanamask$tosc20m_B8A+toscanamask$tosc20m_B03))
+levelplot(toscanaSENVEG)
+
+# differenza vegetazione, considerando il dato NDVI come "contenuto di vegetazione in generale", si può stimare quanta è giovane e sana
+# facendo la differenza fra NDVI e Senescing Vegetation, così da ottenere un risultato in cui valori bassi, ma positivi, indicano una vegetazione meno 
+# "verde" e quindi più vecchia, valori alti, indicano una vegetazione sana.
+# Valori negativi sono attribuibili a zone non vegetate (città, campi terreni).
+
+emiliadif_veg <- (emiliaNDVI - emiliaSENVEG)
+plot(emiliadif_veg)
+
+toscanadif_veg <- (toscanaNDVI - toscanaSENVEG)
+levelplot(toscanadif_veg)
+
+# Water Bodies normalised
+
+emiliaW <- ((emiliamask$emilia20m_B02-emiliamask$emilia20m_B11)/(emiliamask$emilia20m_B02+emiliamask$emilia20m_B11))
+plot(emiliaW)
+
+toscanaW <- ((toscanamask$tosc20m_B02-toscanamask$tosc20m_B11)/(toscanamask$tosc20m_B02+toscanamask$tosc20m_B11))
+plot(toscanaW)
+
+# CLASSIFICAZIONE 
+set.seed(1)
+emilia_cla <- unsuperClass(emiliamask, nClasses = 4)
+plot(emilia_cla$map)
+set.seed(1)
+toscana_cla <- unsuperClass(toscanamask, nClasses = 4)
+plot(toscana_cla$map)
