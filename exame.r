@@ -42,48 +42,71 @@ plotRGB(toscana2021,4, 3, 2, stretch="lin") # colori naturali
 # B8 = near infrared
 # B11 = short wave infrared
 # AOT = aerosol optical thickness
-# WVP = water colour images
+# WVP = water vapour map
+
+# Pulizia delle nuvole con la soglia inferiore del 25% di brillantezza nella banda 4 (red).
+# Le nuvole riflettono molto di più di tutto il il resto nella banda 4, per cui si è visto che tutto ciò che ha un valore nella banda 4
+# superiore al 25% circa dei valori più alti, si può attribuire con adeguata sicurezza ad una nuvola.
+# Di conseguenza è possibile eliminarlo attraverso la funzione "mask"
+# Algoritmo di analisi trovato sulla pagina: "https://sentinels.copernicus.eu/web/sentinel/technical-guides/sentinel-2-msi/level-2a/algorithm".
+
+emiliaNA <- emilia2021$emilia20m_B04 > 3000
+plot(emiliaNA)
+emiliamask <- mask(emilia2021, emiliaNA, maskvalue=TRUE)
+plot(emiliamask)
+
+toscanaNA <- toscana2021$tosc20m_B04 > 3000
+plot(toscanaNA)
+toscanamask <- mask(toscana2021, toscanaNA, maskvalue=TRUE)
+plot(toscanamask)
+
+# NDSI (normalised difference snow index)  ?? LO TNEGO ?? A COSA MI PUò SERVIRE ????
+
+emiliaNDSI <- ((emiliamask$emilia20m_B03-emiliamask$emilia20m_B11)/(emiliamask$emilia20m_B03+emiliamask$emilia20m_B11))
+par(mfrow=c(1,2))
+plot(emiliaNDSI)
+plot(emiliamask$emilia20m_B04)
+
+emiliacloudy <- emiliaNDSI*emiliamask$emilia20m_B04
+plot(emiliacloudy)
 
 # Analisi multivariata (PCA)
 
-emiliarid <- aggregate(emilia2021, fact=3) # Aggrego i pixel di un fattore 5, quindi diventeranno pixel di 100x100 metri, per velocizzare i calcoli.
+emiliarid <- aggregate(emiliamask, fact=3) # Aggrego i pixel di un fattore 3, quindi diventeranno pixel di 60x60 metri, per velocizzare i calcoli.
 emiliarid
 plotRGB(emiliarid, 4, 3, 2, stretch="Lin")
 emiliapca <- rasterPCA(emiliarid)
-plot(emiliapca$map)
 emiliapca #informazioni
 summary(emiliapca$model)
-# pc1=76,5% pc2=18,4% pc3=0,04% ... pc13
+# pc1=75.6%, pc2=20.8%, pc3=0.016%, pc4=0.014%, ... , pc13
 
-toscanarid <- aggregate(toscana2021, fact=3)
+toscanarid <- aggregate(toscanamask, fact=3)
 toscanarid
 plotRGB(toscanarid, 4, 3, 2, stretch="Lin")
 toscanapca <- rasterPCA(toscanarid)
-plot(toscanapca$map)
 toscanapca #informazioni
 summary(toscanapca$model)
-# pc1=82,7% pc2=13,7% pc3=0,03% ... pc13
-
-# SERVE LA PULIZIA DALLE NUVOLEEEEE GRAZIEEEEE
+# pc1=69.4%, pc2=26.3%, pc3=0.027%, pc4=0.0098%, ..., pc13
 
 # Variabilità spaziale sulla componente principale della pca (deviazione standard)
 
 emiliapc1 <- emiliapca$map$PC1
 emiliasd <- focal(emiliapc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 
-emiliaplasma <- ggplot() + 
-  geom_raster(emiliasd, mapping = aes(x=x, y=y, fill=layer)) + 
-  scale_fill_viridis(option = "plasma") +
-  ggtitle("Dev. St. of pc1 by plasma colour scale")
-plot(emiliaplasma)
+#emiliaplasma <- ggplot() + 
+#  geom_raster(emiliasd, mapping = aes(x=x, y=y, fill=layer)) + 
+#  scale_fill_viridis(option = "plasma") +
+#  ggtitle("Dev. St. of pc1 by plasma colour scale")
+#plot(emiliaplasma)
 
 toscanapc1 <- toscanapca$map$PC1
 toscanasd <- focal(toscanapc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 
-toscanaplasma <- ggplot() + 
-  geom_raster(toscanasd, mapping = aes(x=x, y=y, fill=layer)) + 
-  scale_fill_viridis(option = "plasma") +
-  ggtitle("Dev. St. of pc1 by plasma colour scale")
-plot(toscanaplasma)
+#toscanaplasma <- ggplot() + 
+#  geom_raster(toscanasd, mapping = aes(x=x, y=y, fill=layer)) + 
+#  scale_fill_viridis(option = "plasma") +
+#  ggtitle("Dev. St. of pc1 by plasma colour scale")
+#plot(toscanaplasma)
 
-
+levelplot(emiliasd)
+levelplot(toscanasd)
