@@ -51,12 +51,10 @@ plotRGB(toscana2021,4, 3, 2, stretch="lin") # colori naturali
 emiliaNA <- emilia2021$emilia20m_B04 > 3000
 plot(emiliaNA)
 emiliamask <- mask(emilia2021, emiliaNA, maskvalue=TRUE)
-plot(emiliamask$emilia20m_TCI)
 
 toscanaNA <- toscana2021$tosc20m_B04 > 3000
 plot(toscanaNA)
 toscanamask <- mask(toscana2021, toscanaNA, maskvalue=TRUE)
-plot(toscanamask$tosc20m_B04)
 
 # NDSI (normalised difference snow index)  ?? LO TNEGO ?? A COSA MI PUò SERVIRE ????
 
@@ -79,7 +77,6 @@ summary(emiliapca$model)
 
 toscanarid <- aggregate(toscanamask, fact=3)
 toscanarid
-plotRGB(toscanarid, 4, 3, 2, stretch="Lin")
 toscanapca <- rasterPCA(toscanarid)
 toscanapca #informazioni
 summary(toscanapca$model)
@@ -105,49 +102,93 @@ toscanasd <- focal(toscanapc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 #  ggtitle("Dev. St. of pc1 by plasma colour scale")
 #plot(toscanaplasma)
 
-levelplot(emiliasd)
-levelplot(toscanasd)
+plot(emiliasd, ylab = "latitudine", xlab = "longitudine", main = "Dev. St. Emilia")
+levelplot(emiliasd, main=list("Dev. St. Emilia"))
+levelplot(toscanasd, main=list("Dev. St. Toscana"))
 
 # NDVI (Normalised difference vegetation index)
 
 emiliaNDVI <- ((emiliamask$emilia20m_B8A-emiliamask$emilia20m_B04)/(emiliamask$emilia20m_B8A+emiliamask$emilia20m_B04))
-levelplot(emiliaNDVI)
-
 toscanaNDVI <- ((toscanamask$tosc20m_B8A-toscanamask$tosc20m_B04)/(toscanamask$tosc20m_B8A+toscanamask$tosc20m_B04))
-levelplot(toscanaNDVI)
+
+emiliaNDVIviridis <- ggplot() + #crea una nuova finestra vuota
+  geom_raster(emiliaNDVI, mapping = aes(x=x, y=y, fill=layer)) + # crea la geometria a griglia di pixel(raster) e la mappa con le aesthetics inserite da noi
+  scale_fill_viridis() + #Utilizza la legenda (color palette) già preparata, di default utilizza quella "viridis".
+  ggtitle("NDVI emilia by viridis colour scale") #Titolo immagine
+toscanaNDVIviridis <- ggplot() + 
+  geom_raster(toscanaNDVI, mapping = aes(x=x, y=y, fill=layer)) +
+  scale_fill_viridis() + 
+  ggtitle("NDVI toscana by viridis colour scale")
+grid.arrange(emiliaNDVIviridis, toscanaNDVIviridis, nrow=1, ncol=2)
+
+emiliaNDVIsd <- focal(emiliaNDVI, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+toscanaNDVIsd <- focal(toscanaNDVI, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+par(mfrow=c(1,2))
+plot(emiliaNDVIsd, main="Variabilità NDVI Emilia")
+plot(toscanaNDVIsd, main="Variabilità NDVI Toscana")
 
 # Senescing Vegetation normalised (vegetazione invecchiata o malata, poco produttiva di clorofilla)
 # Banda 3 (green) riflette meno nella vegetazione vecchia o malata, per cui valori più alti di Senescing Vegetation indicano una pianta più vecchia.
 
 emiliaSENVEG <- ((emiliamask$emilia20m_B8A-emiliamask$emilia20m_B03)/(emiliamask$emilia20m_B8A+emiliamask$emilia20m_B03))
-levelplot(emiliaSENVEG)
-
 toscanaSENVEG <- ((toscanamask$tosc20m_B8A-toscanamask$tosc20m_B03)/(toscanamask$tosc20m_B8A+toscanamask$tosc20m_B03))
-levelplot(toscanaSENVEG)
+
+emiliaSENVEGviridis <- ggplot() + 
+  geom_raster(emiliaSENVEG, mapping = aes(x=x, y=y, fill=layer)) +
+  scale_fill_viridis() + 
+  ggtitle("Senescing vegetation emilia by viridis colour scale") 
+toscanaSENVEGviridis <- ggplot() +
+  geom_raster(toscanaSENVEG, mapping = aes(x=x, y=y, fill=layer)) +
+  scale_fill_viridis() + 
+  ggtitle("Senesscing vegetation toscana by viridis colour scale")
+grid.arrange(emiliaSENVEGviridis, toscanaSENVEGviridis, nrow=1, ncol=2)
 
 # differenza vegetazione, considerando il dato NDVI come "contenuto di vegetazione in generale", si può stimare quanta è giovane e sana
 # facendo la differenza fra NDVI e Senescing Vegetation, così da ottenere un risultato in cui valori bassi, ma positivi, indicano una vegetazione meno 
-# "verde" e quindi più vecchia, valori alti, indicano una vegetazione sana.
+# "verde" e quindi più vecchia. Valori alti, indicano una vegetazione sana.
 # Valori negativi sono attribuibili a zone non vegetate (città, campi terreni).
 
 emiliadif_veg <- (emiliaNDVI - emiliaSENVEG)
-plot(emiliadif_veg)
-
 toscanadif_veg <- (toscanaNDVI - toscanaSENVEG)
-levelplot(toscanadif_veg)
+toscanadif_veg[toscanadif_veg > 0.3] <- NA
+
+emiliaDIFviridis <- ggplot() + 
+  geom_raster(emiliadif_veg, mapping = aes(x=x, y=y, fill=layer)) +
+  scale_fill_viridis() + 
+  ggtitle("Vegetazione sana emilia by viridis colour scale") 
+toscanaDIFviridis <- ggplot() +
+  geom_raster(toscanadif_veg, mapping = aes(x=x, y=y, fill=layer)) +
+  scale_fill_viridis() + 
+  ggtitle("Vegetazione sana toscana by viridis colour scale")
+grid.arrange(emiliaDIFviridis, toscanaDIFviridis, nrow=1, ncol=2)
 
 # Water Bodies normalised
 
 emiliaW <- ((emiliamask$emilia20m_B02-emiliamask$emilia20m_B11)/(emiliamask$emilia20m_B02+emiliamask$emilia20m_B11))
-plot(emiliaW)
-
 toscanaW <- ((toscanamask$tosc20m_B02-toscanamask$tosc20m_B11)/(toscanamask$tosc20m_B02+toscanamask$tosc20m_B11))
-plot(toscanaW)
+
+emiliaWviridis <- ggplot() + 
+  geom_raster(emiliaW, mapping = aes(x=x, y=y, fill=layer)) +
+  scale_fill_viridis() + 
+  ggtitle("Corpi d'acqua emilia by viridis colour scale") 
+toscanaWviridis <- ggplot() +
+  geom_raster(toscanaW, mapping = aes(x=x, y=y, fill=layer)) +
+  scale_fill_viridis() + 
+  ggtitle("Corpi d'acqua toscana by viridis colour scale")
+grid.arrange(emiliaWviridis, toscanaWviridis, nrow=1, ncol=2)
+
+# Vapore Acqueo WVP
+
+plot(emiliamask$emilia20m_WVP)
+plot(toscanamask$tosc20m_WVP)
 
 # CLASSIFICAZIONE 
-set.seed(1)
+
+set.seed(2)
 emilia_cla <- unsuperClass(emiliamask, nClasses = 4)
-plot(emilia_cla$map)
-set.seed(1)
+set.seed(2)
 toscana_cla <- unsuperClass(toscanamask, nClasses = 4)
+
+par(mfrow=c(1,2))
+plot(emilia_cla$map)
 plot(toscana_cla$map)
