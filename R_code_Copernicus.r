@@ -3,7 +3,7 @@
 
 install.packages("raster")
 library(raster)
-# 
+# Pacchetto necessario per la estrazione dei dati copernicus
 install.packages("ncdf4")
 library(ncdf4)
 
