@@ -14,6 +14,7 @@
 
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 
+
 # 1. My first code in R for remote sensing.
 
 # Installare il pacchetto raster di R (esterno a R quindi argomento tra virgolette), funzione per installare è install.packages.
@@ -110,7 +111,9 @@ plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
 plotRGB(p224r63_1988,r=4,g=3,b=2,stretch="Hist")
 plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Hist")
 
+
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+
 
 #2. R_code_time_series
 #Time series analysis of Greenland increase temperature
@@ -196,6 +199,7 @@ levelplot(melt_amount, col.regions=cl)
 
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 
+
 # 3. R code Copernucus data
 # Codice per estrazioni dati da copernicus
 # visualizing Coperniscus data
@@ -223,7 +227,9 @@ plot(albedo2019_12_03,col=cl,main="Albedo mondiale dicembre 2019")
 albedores <- aggregate(albedo2019_12_03,fact=100)
 plot(albedores, col=cl, main="Albedo mondiale ridotto")
 
+
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+
 
 #4. R_code_knitr
 #Codice che utilizza il pacchetto knitr per creare un report dei risultati
@@ -242,7 +248,9 @@ setwd("C:/lab/Greenland")
 
 stitch("C:/lab/Greenland/R_code_greenland.txt", template=system.file("misc", "knitr-template.Rnw", package="knitr"))
 
+
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+
 
 # 5. R_code_multivariate_analysis.r
 
@@ -288,7 +296,9 @@ plot(p224r63_2011res_pca$map) # mappe diverse per componente con massimi valori 
 p224r63_2011res_pca$call # codice/riga che ha generato l'immagine 
 plotRGB(p224r63_2011res_pca$map, r=4,g=3,b=2,stretch="lin")
 
+
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+
 
 # 6. R code classification 
 
@@ -345,15 +355,305 @@ par(mfrow=c(2,1))
 plotRGB(gc, r=1,g=2,b=3, stretch="hist")
 plot(gcc$map)
 
-#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-
-
 
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 
-#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+
+# 7. R code ggplot2
+
+# carichiamo i pacchetti necessari, per i plot di ggplot2 serve il pacchetto ggplot2, e per farne di più assieme serve gridExtra.
+library(raster)
+library(RStoolbox)
+library(ggplot2)
+library(gridExtra)
+
+#setto la cartella di lavoro
+setwd("~/lab/")
+
+#carico la foto
+p224r63 <- brick("p224r63_2011_masked.grd")
+
+# Effettuo i plot con ggRGB per visualizzare con le bande (numero) nei colori successivi red, green, blue.
+ggRGB(p224r63,3,2,1, stretch="lin")
+ggRGB(p224r63,4,3,2, stretch="lin")
+
+p1 <- ggRGB(p224r63,3,2,1, stretch="lin")
+p2 <- ggRGB(p224r63,4,3,2, stretch="lin")
+
+grid.arrange(p1, p2, nrow = 2) # this needs gridExtra
+
 
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+
+
+# 8. R_code_vegetation_indices.r
+
+# serve il pacchetto raster
+library(raster)
+library(RStoolbox)
+library(rasterdiv)
+library(rasterVis)
+
+# impostare la cartella di lavoro
+setwd("C:/lab/")
+
+# Caricare la immagini
+defor1 <- brick("defor1.jpg")
+defor2 <- brick("defor2.jpg")
+
+# b1 = NIR, b2 = red, b3 = green
+
+# Visualizziamo le immagini con i colori con coi sono stati importati
+par(mfrow=c(2,1))
+plotRGB(defor1, r=1,b=2,g=3, stretch="lin")
+plotRGB(defor2, r=1,b=2,g=3, stretch="lin")
+# La zona è la stessa perchè:
+# 1. il fiume è uguale (anche se i fiumi possono cambiare nel tempo)
+# 2. si vede una tessera di territorio al centro che rimane uguale
+defor1
+# Difference Vegetation Index, differenza pixe per pixel 
+#della banda NIR (alta riflettanza veg) - Banda red(bassa relf veg)
+dvi1 <- defor1$defor1.1 - defor1$defor1.2
+plot(dvi1)
+
+#plottiamo con colori più indicati
+cl<- colorRampPalette(c("darkblue","yellow","red","black"))(100)
+plot(dvi1, col=cl)
+#Stessa cosa per defor2 calcoliamo il dvi:
+defor2
+# Difference Vegetation Index, differenza pixe per pixel 
+#della banda NIR (alta riflettanza veg) - Banda red(bassa relf veg)
+dvi2 <- defor2$defor2.1 - defor2$defor2.2
+plot(dvi2)
+
+#plottiamo con colori più indicati
+cl<- colorRampPalette(c("darkblue","yellow","red","black"))(100)
+plot(dvi2, col=cl)
+
+# Paragone pre e post:
+par(mfrow=c(2,1))
+plot(dvi1, col=cl, main="dvi at time 1")
+plot(dvi2, col=cl, main="dvi at time 2")
+
+#EVIDENTE CHE LA PARTE GIALLA è MOLTO MAGGIORE, RAPPRESENTANDO UNA RIDUZIONE DEL DVi, QUINDI UNA RIDUZIONE DELLA VEG SANA. 
+#Differenza del dvi fra i due tempi delle immagine (pixel per pixel)
+difdvi <- dvi1 - dvi2
+cld <- colorRampPalette(c("blue","white","red"))(100)
+plot(difdvi, col=cld)
+
+# Per poter paragonare immagini a diversi bit bisogna normalizzare il dvi in ndvi
+# ndvi = (nir-red)/(nir+red) così tutte le immagini hanno un range da -1 a 1
+ndvi1 <- (defor1$defor1.1 - defor1$defor1.2)/(defor1$defor1.1 + defor1$defor1.2)
+plot(ndvi1, col=cl)
+# Per seconda immagine uguale:
+ndvi2 <- (defor2$defor2.1 - defor2$defor2.2)/(defor2$defor2.1 + defor2$defor2.2)
+plot(ndvi2, col=cl)
+# Differenza di ndvi
+difndvi = ndvi1 - ndvi2
+plot(difndvi, col=cld)
+
+# Possibile calcolare più indici simultaneamente compreso dvi e ndvi
+# con la funzione "spectralIndices" all'interno del pacchetto RStoolbox
+# Consulta il manuale su internet per utilizzarla
+# Calcolo tutti gli indici considerando le bande tranne quella del blu:
+vi1 <- spectralIndices(defor1, green = 3, red = 2, nir = 1)
+plot(vi1, col=cl)
+vi2 <- spectralIndices(defor2, green = 3, red = 2, nir = 1)
+plot(vi1, col=cl)
+
+# RASTERDIV: worldwide ndvi
+plot(copNDVI)
+#Togliere l'acqua, pixel con valore 253,254,255 li impostiamo come NA.
+#perhe riflettanza massima è data dall'acqua, eliminarla per migliorare la visualizzazione del resto.
+copNDVI <- reclassify(copNDVI, cbind(253:255,NA))
+plot(copNDVI)
+
+# serve rasterVis:
+levelplot(copNDVI)
+
+
+#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+
+
+# 9. R_code_land_cover.r
+
+library(raster)
+library(RStoolbox)
+install.packages("ggplot2")
+library(ggplot2)
+install.packages("gridExtra")
+library(gridExtra)
+#library(rasterdiv)
+#library(rasterVis)
+
+setwd("C:/lab/")
+
+defor1 <- brick("defor1.jpg")
+defor2 <- brick("defor2.jpg")
+# Informazione immagini NIR=banda 1, Red=banda 2, green=banda 3
+par(mfrow=c(2,1))
+plotRGB(defor1, r=1,g=2,b=3, stretch="lin")
+plotRGB(defor2, r=1,g=2,b=3, stretch="lin")
+# Con il pacchetto ggplot si ottengono delle visualizzazioni plot
+# esteticamente migliori, basta usare la funzione che si chiama ggRGB al posto di plotRGB
+# per visualizzarli insieme(multiframe), al posto di par, bisogna installare un pacchetto "gridExtra"
+# dopo poi si utilizza la funzione "grid.arrange"
+p1 <- ggRGB(defor1, r=1,g=2,b=3, stretch="lin")
+p2 <- ggRGB(defor2, r=1,g=2,b=3, stretch="lin")
+grid.arrange(p1,p2, nrow=2) # plotto insieme due immagini RGB (p1 e p2) lungo 2 righe (nrow=2) e una colonna.
+# Classificazione non supervisionata, scelta dei punti per impostare le classi in maniera automatica randomica da parte sel software
+# classificazione con 2 classi delle due immagini
+set.seed(2) #imposta lo stesso risultato perchè stesso set originale
+d1c <- unsuperClass(defor1, nClasses = 2)
+d2c <- unsuperClass(defor2, nClasses = 2)
+d1c
+d2c
+plot(d1c$map)
+plot(d2c$map)
+# Divide la parte di foresta(classe 2) e la parte coltivata(classe 1)
+# il fiume è in parte nel agricolo e parte foresta in base alla riflettanza
+# per migliorare la classificazione si possono fare più classi
+d1c3 <- unsuperClass(defor1, nClasses = 3)
+d2c3 <- unsuperClass(defor2, nClasses = 3)
+plot(d1c3$map)
+plot(d2c3$map)
+# Ha diviso la parte di agricoltura in due classi
+
+# Distribuzione dei pixel nelle varie classi: frequenza prima immagine anno 1992
+f1 <- freq(d1c$map)
+# classe 1 foresta = 306167 pixel
+# classe 2 agricolo = 35125 pixel
+s1 <- 306167+35125 #Pixel totali
+#proporzione di pixel nell'immagine facendo la divisione del risultato della function freq e i pixel totali
+prop1 <- f1/s1
+prop1 # 89,7% foresta 10,3 % agricolo
+# Frequenza immagine 2006
+f2 <- freq(d2c$map)
+# classe 1 foresta = 306167 pixel
+# classe 2 agricolo = 35125 pixel
+s2 <- 342726 #ATTENZIONE i pixel totali non sono uguali a prima
+prop1 <- f2/s2
+prop1 #52 % foresta 48 % agricoltura
+
+# Creazione di un data frame per visualizzare i dati di percentuale di copertura del suolo
+# Si utilizza la funzipone data.frame(nomi colonne)
+# Creo le colonne a cui associo i componenti:
+Cover <- c("Forest","Agriculture") 
+Percent_1992 <- c(89.7,10.3)
+Percent_2006 <- c(52,48)
+# Creo il data set a tabella:
+percentages <- data.frame(Cover,Percent_1992,Percent_2006)
+percentages
+
+# Grafichiamo il dataset utilizzando ggplot specificando le caratterisctiche estetiche
+ggp1 <- ggplot(percentages, aes(x=Cover,y=Percent_1992, color=Cover)) + geom_bar(stat = "identity",fill="white")
+# aes: inserimento degli assi da cui prednere i dati, color=Cover costruisce la legenda in base al colore
+# + geom_bar:g geometria del grafico a barre, stat="identity": i dati li prende così come sono grezzi, fill="white": colore riempimento barre
+ggp2 <-ggplot(percentages, aes(x=Cover,y=Percent_2006, color=Cover)) + geom_bar(stat = "identity",fill="white")
+
+#Visualizziamo insieme i due grafici con grid.arrange
+grid.arrange(ggp1, ggp2, nrow=1)
+
+
+#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+
+# 10. R_code_variability.r
+
+#Pacchetti richiesti:
+library(raster)
+library(RStoolbox)
+install.packages("viridis") # for ggplot colouring
+library(ggplot2) # for plotting ggplot
+library(gridExtra) # for plotting ggplot toghether
+library(viridis)
+#Imposto la cartella di lavoro
+setwd("C:/lab/")
+
+#importiamo l'immagine sentinel
+sent <- brick("sentinel.png")
+
+# NIR 1, RED 2, GREEN 3
+# r=1, g=2, b=3
+plotRGB(sent) 
+#funziona lo stesso perchè mette l'opzione standard 
+# con red sul 1, green sul 2, blu sul 3, e stretch lineare
+
+#Cambiamo i colori con il NIR sul verde, vegetazione verde fluo
+plotRGB(sent, r=2, g=1, b=3, stretch="lin")
+
+#nome bande:
+sent
+#assoccio le componenti nir e red ad un oggetto per facilitare i calcoli
+nir <- sent$sentinel.1
+red <- sent$sentinel.2
+#calcolo del NDVI SU CUI POI CALCOLARE DEV. E MEAN PERCHè APPLICABILI SOLO AD UNA BANDA/SINGOLO STRATO
+ndvi <- (nir-red)/(nir+red)
+#visualizzo NCVI con una scala colori creata da noi
+cl <- colorRampPalette(c("black","white","red","magenta","green"))(200)
+plot(ndvi, col=cl)
+
+# Calcolo della deviazione standard con il metodo "moving window" attraverso la funz focal
+# "w=..." =geometria finestra (attenzione conviene forma isotropa), "fun=.." funzione da calcolare, sd=standard deviation
+ndvisd3 <- focal(ndvi, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+clsd <- colorRampPalette(c("blue","green","pink","magenta","orange","brown","red","yellow"))(100)
+plot(ndvisd3, col=clsd)
+
+# Rifacciamo il calcolo con la funzione media
+ndvimean3 <- focal(ndvi, w=matrix(1/9, nrow=3, ncol=3), fun=mean)
+plot(ndvimean3, col=clsd)
+
+# Aumentiamo la grandezza della finestra mobile, avendo una risoluzione della deviazione standard minore
+ndvisd9 <- focal(ndvi, w=matrix(1/81, nrow=9, ncol=9), fun=sd)
+plot(ndvisd9, col=clsd)
+
+# SE NON VOGLIAMO CALCOLARE LA DEV.ST. E MEAN SUL INDICE NDVI,
+# FACCIAMO UN ANALISI MULTIVARIATA (PCA) DA OTTENERE UNA BANDA PRINCIPALE CHE CONTIENE LA MAGGIOR PARTE DELLA VARIABILITà
+sentpca <- rasterPCA(sent)
+plot(sentpca$map)
+sentpca #informazioni
+summary(sentpca$model) # quanta variabilità spiegnao le componenti (assi)
+# pc1=77.33 %, pc2=53.51 %, pc3=5.77 %, pc4=0 %.
+pc1 <- sentpca$map$PC1
+pc1sd <- focal(pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+clsd <- colorRampPalette(c("blue","green","pink","magenta","orange","brown","red","yellow"))(100)
+plot(pc1sd, col=clsd)
+# Colore omogeneo blu rappresenta le valli o praterie di alta quota, in cui si ha appunto una certa omogeneità nel terreno (meno variabilità)
+# Metre i colori rossi rappresentano le zone con più variabilità, ossia crepacci e sone in roccia diversificate.
+# Macchia blu in alto a sinistra è una nuvola, per quello così omogeneo
+
+# Come richiamare pezzi di codice già scritti senza dover copiare e incollare.
+source("source_test_lezione.r") #dev.st. 7x7 di pc1
+
+# Plot con ggplot, utilizzando una sorgente
+source("source_ggplot.r")
+
+# Contenuto del source applicato ai miei dati:
+pviridis <- ggplot() + #crea una nuova finestra vuota
+  geom_raster(pc1sd, mapping = aes(x=x, y=y, fill=layer)) + # crea la geometria a griglia di pixel(raster) e la mappa con le aesthetics inserite da noi
+  scale_fill_viridis() + #Utilizza la legenda (color palette) già preparata, di default utilizza quella "viridis".
+  ggtitle("Dev. St. of pc1 by viridis colour scale") #Titolo immagine
+
+# Utiliziamo un altra legenda (colour scale)
+pturbo <- ggplot() + 
+  geom_raster(pc1sd, mapping = aes(x=x, y=y, fill=layer)) + 
+  scale_fill_viridis(option = "turbo") +
+  ggtitle("Dev. St. of pc1 by turbo colour scale") #ATTENZIONE trae in inganno il colore giallo che spicca ma in realtà è a metà dei vaolori in legenda.
+
+pplasma <- ggplot() + 
+  geom_raster(pc1sd, mapping = aes(x=x, y=y, fill=layer)) + 
+  scale_fill_viridis(option = "plasma") +
+  ggtitle("Dev. St. of pc1 by plasma colour scale")
+
+pmagma <- ggplot() + 
+  geom_raster(pc1sd, mapping = aes(x=x, y=y, fill=layer)) + 
+  scale_fill_viridis(option = "magma") +
+  ggtitle("Dev. St. of pc1 by magma colour scale")
+
+
+#Plottiamo insieme tutte le possibili legende che vogliamo, con grid.arrange utilizzando gli oggetti a cui abbiamo associato le mappe precedenti di viridis
+grid.arrange(pviridis, pplasma, pmagma, pturbo, nrow=2, ncol=2)
+
+
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
