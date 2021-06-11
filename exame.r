@@ -29,10 +29,10 @@ importtoscana
 # salvo tutto con un nome file TGr
 emilia2021 <- stack(importemilia)
 emilia2021
-plotRGB(emilia2021, 4, 3, 2, stretch="Lin") # colori naturali
+ggRGB(emilia2021, 4, 3, 2, stretch="Lin") # colori naturali
 toscana2021 <- stack(importtoscana)
 toscana2021
-plotRGB(toscana2021,4, 3, 2, stretch="lin") # colori naturali
+ggRGB(toscana2021,4, 3, 2, stretch="Lin") # colori naturali
 
 # BANDE:
 # B2 = blu
