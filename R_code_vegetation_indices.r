@@ -16,11 +16,11 @@ defor2 <- brick("defor2.jpg")
 # b1 = NIR, b2 = red, b3 = green
 
 # Visualizziamo le immagini con i colori con coi sono stati importati
-
 par(mfrow=c(2,1))
 plotRGB(defor1, r=1,b=2,g=3, stretch="lin")
 plotRGB(defor2, r=1,b=2,g=3, stretch="lin")
-# La zona è la stessa perchè 1. il fiume è uguale (anche se i fiumi possono cambiare nel tempo)
+# La zona è la stessa perchè:
+# 1. il fiume è uguale (anche se i fiumi possono cambiare nel tempo)
 # 2. si vede una tessera di territorio al centro che rimane uguale
 defor1
 # Difference Vegetation Index, differenza pixe per pixel 
@@ -46,8 +46,8 @@ plot(dvi2, col=cl)
 par(mfrow=c(2,1))
 plot(dvi1, col=cl, main="dvi at time 1")
 plot(dvi2, col=cl, main="dvi at time 2")
-#EVIDENTE CHE LA PARTE GIALLA è MOLTO MAGGIORE, RAPPRESENTANDO UNA RIDUZIONE DEL DVi, QUINDI UNA RIDUZIONE DELLA VEG SANA. 
 
+#EVIDENTE CHE LA PARTE GIALLA è MOLTO MAGGIORE, RAPPRESENTANDO UNA RIDUZIONE DEL DVi, QUINDI UNA RIDUZIONE DELLA VEG SANA. 
 #Differenza del dvi fra i due tempi delle immagine (pixel per pixel)
 difdvi <- dvi1 - dvi2
 cld <- colorRampPalette(c("blue","white","red"))(100)
