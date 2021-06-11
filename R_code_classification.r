@@ -14,7 +14,10 @@ so
 #visualizzazione livelli con schema RGB colori naturali utilizzando tutti i pixel con stretch lineare
 plotRGB(so, 1,2,3, stretch="lin")
 
-# classificazione non supervisionata dall'utente, ossia il software effettua il training sete da solo basandosi sul numero di classi scelto da noi.
+# classificazione non supervisionata dall'utente, ossia il software effettua la classificazione da solo, basandosi sul numero di classi scelto da noi.
+# Il software, partendo da un numero random di pixel di partenza a cui associa una classe, contiunua poi ad associare gli altri pixel alle classi da lui scelte
+# in base alla somiglianza con la riflettanza nei pixel di partenza. 
+# Per associare un pixel ad una certa classe, che ha certi valori basati sui pixel di settaggio iniziali, utilizza una funzione di massima verosomiglianza.
 soc3 <- unsuperClass(so, nClasses = 3)
 # visualizzare la mappa creata ma esplicitando di plottare la parte "map" di soc,
 # perchè in soc sono contenute più informazione; mappa e il modello da cui si è costruito le classi
