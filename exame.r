@@ -29,10 +29,8 @@ importtoscana
 # salvo tutto con un nome file TGr
 emilia2021 <- stack(importemilia)
 emilia2021
-ggRGB(emilia2021, 4, 3, 2, stretch="Lin") # colori naturali
 toscana2021 <- stack(importtoscana)
 toscana2021
-ggRGB(toscana2021,4, 3, 2, stretch="Lin") # colori naturali
 
 # BANDE:
 # B2 = blu
@@ -50,25 +48,16 @@ ggRGB(toscana2021,4, 3, 2, stretch="Lin") # colori naturali
 # Algoritmo di analisi trovato sulla pagina: "https://sentinels.copernicus.eu/web/sentinel/technical-guides/sentinel-2-msi/level-2a/algorithm".
 
 emiliaNA <- emilia2021$emilia20m_B04 > 3000
-plot(emiliaNA)
 emiliamask <- mask(emilia2021, emiliaNA, maskvalue=TRUE)
+ggRGB(emiliamask, 4, 3, 2, stretch="Lin") # colori naturali
 
 toscanaNA <- toscana2021$tosc20m_B04 > 3000
-plot(toscanaNA)
 toscanamask <- mask(toscana2021, toscanaNA, maskvalue=TRUE)
-
-# NDSI (normalised difference snow index)  ?? LO TNEGO ?? A COSA MI PUò SERVIRE ????
-
-#emiliaNDSI <- ((emiliamask$emilia20m_B03-emiliamask$emilia20m_B11)/(emiliamask$emilia20m_B03+emiliamask$emilia20m_B11))
-#par(mfrow=c(1,2))
-#plot(emiliaNDSI)
-
-#emiliacloudy <- emiliaNDSI*emiliamask$emilia20m_B04
-#plot(emiliacloudy)
+ggRGB(toscanamask,4, 3, 2, stretch="Lin") # colori naturali
 
 # Analisi multivariata (PCA)
 
-emiliarid <- aggregate(emiliamask, fact=2) # Aggrego i pixel di un fattore 3, quindi diventeranno pixel di 60x60 metri, per velocizzare i calcoli.
+emiliarid <- aggregate(emiliamask, fact=2) # Aggrego i pixel di un fattore 2, quindi diventeranno pixel di 40x40 metri, per velocizzare i calcoli.
 emiliarid
 plotRGB(emiliarid, 4, 3, 2, stretch="Lin")
 emiliapca <- rasterPCA(emiliarid)
@@ -267,8 +256,4 @@ ggp2 <- ggplot(percentages, aes(x=Cover,y=Percentuale_terreno_coperto_, color=Co
 
 #Visualizziamo insieme i due grafici con grid.arrange
 grid.arrange(ggp1, ggp2, nrow=1)
-
-# PROVIAMO ALTRE VISUALIZZAZIONI
-
-# create a dataset
 
