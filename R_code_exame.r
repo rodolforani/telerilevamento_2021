@@ -1,4 +1,4 @@
-# Prova esame influenza catena appenninica e suolo -->> Toscana vs Emilia dati Sentinel 2
+# Esame: influenza catena appenninica e geologia su uso del suolo -->> Toscana vs Emilia dati Sentinel 2
 
 library(raster)
 library(rasterVis)
@@ -26,7 +26,6 @@ importtoscana <- lapply(listtoscana,raster)
 importtoscana
 # adesso abbiamo i singoli file importati e per facilitare le future operazioni 
 # unisco le immagini in un unico file come se fossero più livelli (bande) all'interno di un unico file
-# salvo tutto con un nome file TGr
 emilia2021 <- stack(importemilia)
 emilia2021
 toscana2021 <- stack(importtoscana)
@@ -49,25 +48,84 @@ toscana2021
 
 emiliaNA <- emilia2021$emilia20m_B04 > 3000
 emiliamask <- mask(emilia2021, emiliaNA, maskvalue=TRUE)
-ggRGB(emiliamask, 4, 3, 2, stretch="Lin") # colori naturali
 
 toscanaNA <- toscana2021$tosc20m_B04 > 3000
 toscanamask <- mask(toscana2021, toscanaNA, maskvalue=TRUE)
-ggRGB(toscanamask,4, 3, 2, stretch="Lin") # colori naturali
 
-# Analisi multivariata (PCA)
+# Firme spettrali delle zone verdi in emilia: utilizzando la funzione click per puntare le zone verdi.
+# Scelta dei punti arbitraria all'interno di zone verdi. 
+plotRGB(emiliamask, 4, 3 , 2, stretch="Lin") # colori naturali
+click(emiliamask, id=T, xy=T, cell=T, type="p", pch=16, col="yellow")
 
-emiliarid <- aggregate(emiliamask, fact=2) # Aggrego i pixel di un fattore 2, quindi diventeranno pixel di 40x40 metri, per velocizzare i calcoli.
-emiliarid
-plotRGB(emiliarid, 4, 3, 2, stretch="Lin")
-emiliapca <- rasterPCA(emiliarid)
+# results points of vegetation Emilia:
+#      x      y      cell    B8A (NIR)   B4 (red)   B3(green)
+# 1 627910 4937710 17108236      3433        251         441
+# 2 617030 4933010 18397842      2909       1710        1454
+# 3 642030 4923950 20886062      3933        269         519
+# 4 671390 4923210 21090660      4906        268         713
+# 5 684070 4915970 23078674      4256        210         524
+# 6 681890 4901110 27157635      5090        310         686
+
+# Faccio una media per avere una stima generale:
+mediaNIR <- (3433+2909+3933+4906+4256+5090)/6
+mediaNIR # 4087
+mediaRED <- (251+1710+269+268+210+310)/6
+mediaRED # 503
+mediaGREEN <- (441+1454+519+713+524+686)/6
+mediaGREEN # 723
+
+# Definizione delle colonne dataset versante emiliano:
+band <- c(8,4,3)
+Emiliamedia <- c(4087,503,723)
+
+# Per la toscana:
+
+plotRGB(toscanamask, 4, 3 , 2, stretch="Lin") # colori naturali
+click(toscanamask, id=T, xy=T, cell=T, type="p", pch=16, col="yellow")
+
+# results points of vegetation Toscana:
+#      x      y      cell    B8A (NIR)   B4 (red)   B3(green)
+# 1 612870 4874610  6972944      2675        395         684         
+# 2 633970 4872770  7479079      3860        555         941         
+# 3 673510 4871950  7706146      4554        288         683         
+# 4 628830 4813470 23756672      3149        366         563         
+# 5 658890 4800510 27315695      3072        299         566         
+# 6 706570 4814150 23573899      3743        237         504         
+
+# Faccio una media per avere una stima generale:
+mediaNIR <- (2675+3860+4554+3149+3072+3743)/6
+mediaNIR # 3509
+mediaRED <- (395+555+288+366+299+237)/6
+mediaRED # 357
+mediaGREEN <- (684+941+683+563+566+504)/6
+mediaGREEN # 657
+
+# Definizione delle colonne dataset versante emiliano:
+band <- c(8,4,3)
+Toscanamedia <- c(3509,357,657)
+
+spectral <- data.frame(band, Emiliamedia, Toscanamedia)
+
+# plot the sepctral signatures
+ggplot(spectral, aes(x=band)) +
+  geom_line(aes(y=Emiliamedia), color="red",) +
+  geom_line(aes(y=Toscanamedia), color="blue") +
+  labs(x="band",y="reflectance")
+
+
+# Analisi multivariata PCA
+
+#emiliarid <- aggregate(emiliamask, fact=2) # Aggrego i pixel di un fattore 2, quindi diventeranno pixel di 40x40 metri, per velocizzare i calcoli.
+#emiliarid
+#plotRGB(emiliarid, 4, 3, 2, stretch="Lin")
+emiliapca <- rasterPCA(emiliamask)
 emiliapca #informazioni
 summary(emiliapca$model)
 # pc1=75.6%, pc2=20.8%, pc3=0.016%, pc4=0.014%, ... , pc13
 
 toscanarid <- aggregate(toscanamask, fact=2)
 toscanarid
-toscanapca <- rasterPCA(toscanarid)
+toscanapca <- rasterPCA(toscanamask)
 toscanapca #informazioni
 summary(toscanapca$model)
 # pc1=69.4%, pc2=26.3%, pc3=0.027%, pc4=0.0098%, ..., pc13
@@ -101,8 +159,10 @@ plot(toscanasd, col=cl1, ylab = "latitudine", xlab = "longitudine", main = "Dev.
 # Maschero i corpi d'acqua perchè anche riflettono nel verde e alterano la mappa della senescing vegetation
 # Water Bodies normalised
 
-emiliaW <- ((emiliamask$emilia20m_B02-emiliamask$emilia20m_B11)/(emiliamask$emilia20m_B02+emiliamask$emilia20m_B11))
-toscanaW <- ((toscanamask$tosc20m_B02-toscanamask$tosc20m_B11)/(toscanamask$tosc20m_B02+toscanamask$tosc20m_B11))
+emiliaW <- ((emiliamask$emilia20m_B02-emiliamask$emilia20m_B11)/
+              (emiliamask$emilia20m_B02+emiliamask$emilia20m_B11))
+toscanaW <- ((toscanamask$tosc20m_B02-toscanamask$tosc20m_B11)/
+               (toscanamask$tosc20m_B02+toscanamask$tosc20m_B11))
 
 emiliaWviridis <- ggplot() + 
   geom_raster(emiliaW, mapping = aes(x=x, y=y, fill=layer)) +
@@ -144,42 +204,44 @@ par(mfrow=c(1,2))
 plot(emiliaNDVIsd, col=cl1, main="Variabilità NDVI Emilia", ylab="Latitudine", xlab="Longitudine")
 plot(toscanaNDVIsd, col=cl1, main="Variabilità NDVI Toscana", ylab="Latitudine", xlab="Longitudine")
 
-# Tolgo la parte di mappa con valori di NDVI inferiori a 0.8 così da ottenere solo la parte più vegetata
-
-emiliaNDVI [emiliaNDVI < +0.8] <- NA
-toscanaNDVI [toscanaNDVI < +0.8] <- NA
-plot(emiliaNDVI)
-plot(toscanaNDVI)
-
 # Senescing Vegetation normalised (vegetazione invecchiata o malata, poco produttiva di clorofilla)
 # Banda 3 (green) riflette meno nella vegetazione vecchia o malata, per cui valori più alti di Senescing Vegetation indicano una pianta più vecchia.
 
 emiliaSENVEG <- ((emiliaWmask$emilia20m_B8A-emiliaWmask$emilia20m_B03)/(emiliaWmask$emilia20m_B8A+emiliaWmask$emilia20m_B03))
 toscanaSENVEG <- ((toscanaWmask$tosc20m_B8A-toscanaWmask$tosc20m_B03)/(toscanaWmask$tosc20m_B8A+toscanaWmask$tosc20m_B03))
+
+emiliaSENVEGviridis <- ggplot() +                                      
+  geom_raster(emiliaSENVEG, mapping = aes(x=x, y=y, fill=layer)) +   
+  scale_fill_viridis() + 
+  ggtitle("Senescing vegetation emilia by viridis colours") 
+toscanaSENVEGviridis <- ggplot() +
+  geom_raster(toscanaSENVEG, mapping = aes(x=x, y=y, fill=layer)) +
+  scale_fill_viridis() + 
+  ggtitle("Senescing vegetation toscana by viridis colours")
+grid.arrange(emiliaSENVEGviridis, toscanaSENVEGviridis, nrow=1, ncol=2)
+
+# PULIZIA ESTREMI NDVI E SEN VEG
+
+# Tolgo la parte di mappa con valori di NDVI inferiori a 0.8 così da ottenere solo la parte più vegetata
+emiliaNDVI [emiliaNDVI < +0.8] <- NA
+toscanaNDVI [toscanaNDVI < +0.8] <- NA
+plot(emiliaNDVI)
+plot(toscanaNDVI)
+
 emiliaSENVEG [emiliaSENVEG < +0.7] <- NA
 toscanaSENVEG [toscanaSENVEG < +0.7] <- NA
 emiliaSENVEG [emiliaSENVEG > 0.85] <- NA
 toscanaSENVEG [toscanaSENVEG > 0.85] <- NA  # Esprimo solo la vegetazione vera e propria (compreso anche campi verdi data la risoluzione di 20x20m)
 
-emiliaSENVEGviridis <- ggplot() +                                      
-  geom_raster(emiliaSENVEG, mapping = aes(x=x, y=y, fill=layer)) +   
-  scale_fill_viridis() + 
-  ggtitle("Senescing vegetation emilia by viridis colour scale") 
-toscanaSENVEGviridis <- ggplot() +
-  geom_raster(toscanaSENVEG, mapping = aes(x=x, y=y, fill=layer)) +
-  scale_fill_viridis() + 
-  ggtitle("Senesscing vegetation toscana by viridis colour scale")
-grid.arrange(emiliaSENVEGviridis, toscanaSENVEGviridis, nrow=1, ncol=2)
-
-# differenza vegetazione, considerando il dato NDVI come "contenuto di vegetazione in generale", si può stimare quanta è giovane e sana
+# differenza vegetazione, considerando il dato NDVI come "contenuto di vegetazione in generale" data la , si può stimare quanta è giovane e sana
 # facendo la differenza fra NDVI e Senescing Vegetation, così da ottenere un risultato in cui valori bassi, ma positivi, indicano una vegetazione meno 
 # "verde" e quindi più vecchia. Valori alti, indicano una vegetazione sana.
-# Valori negativi sono attribuibili a zone non vegetate (città, campi terreni).
+# Valori negativi sono attribuibili a zone non vegetate (città, campi terreni)
 
 emiliadif_veg <- (emiliaNDVI - emiliaSENVEG)
 toscanadif_veg <- (toscanaNDVI - toscanaSENVEG)
 emiliadif_veg [emiliadif_veg < 0] <- NA # associo un limite inferiore ad entrambi sapendo che comunque la vegetazione ha un NDVI (banda NIR-banda red) 
-                                        # sempre superiore al senscing indix (banda NIR-banda green), per cui tutti i valori devono essere positivi.
+# sempre superiore al senscing indix (banda NIR-banda green), per cui tutti i valori devono essere positivi.
 emiliaDIFviridis <- ggplot() + 
   geom_raster(emiliadif_veg, mapping = aes(x=x, y=y, fill=layer)) +
   scale_fill_viridis() + 
@@ -239,21 +301,20 @@ Cover <- c("Vegetato","Antropizzato")
 Percentuale_terreno_coperto <- c(60.12,39.87)
 Percentuale_terreno_coperto_<- c(75.66,24.34)
 # Creo il data set a tabella:
-percentages <- data.frame(Cover,Percentuale_E,Percentuale_T)
+percentages <- data.frame(Cover,Percentuale_terreno_coperto,Percentuale_terreno_coperto_)
 percentages
 
 col <- c("blue","green")
 
 # Grafichiamo il dataset utilizzando ggplot specificando le caratterisctiche estetiche
 ggp1 <- ggplot(percentages, aes(x=Cover,y=Percentuale_terreno_coperto, color=Cover)) + 
-  geom_bar(stat = "identity", fill="white") +
+  geom_bar(stat = "identity", fill="White") +
   ggtitle("Emilia")
 # aes: inserimento degli assi da cui prednere i dati, color=Cover costruisce la legenda in base al colore
 # + geom_bar:g geometria del grafico a barre, stat="identity": i dati li prende così come sono grezzi, fill="white": colore riempimento barre
 ggp2 <- ggplot(percentages, aes(x=Cover,y=Percentuale_terreno_coperto_, color=Cover)) + 
-  geom_bar(stat = "identity",fill = "white") +
+  geom_bar(stat = "identity", fill="White") +
   ggtitle("Toscana")
 
 #Visualizziamo insieme i due grafici con grid.arrange
 grid.arrange(ggp1, ggp2, nrow=1)
-
