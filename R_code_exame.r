@@ -45,10 +45,10 @@ toscana2021
 # superiore al 25% circa dei valori più alti, si può attribuire con adeguata sicurezza ad una nuvola.
 # Di conseguenza è possibile eliminarlo attraverso la funzione "mask"
 # Algoritmo di analisi trovato sulla pagina: "https://sentinels.copernicus.eu/web/sentinel/technical-guides/sentinel-2-msi/level-2a/algorithm".
-
+plot(emilia2021$emilia20m_B04)
 emiliaNA <- emilia2021$emilia20m_B04 > 3000
 emiliamask <- mask(emilia2021, emiliaNA, maskvalue=TRUE)
-
+plot(toscana2021$toscana20m_B04)
 toscanaNA <- toscana2021$tosc20m_B04 > 3000
 toscanamask <- mask(toscana2021, toscanaNA, maskvalue=TRUE)
 
