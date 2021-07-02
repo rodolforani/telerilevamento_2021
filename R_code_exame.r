@@ -52,8 +52,10 @@ emiliamask <- mask(emilia2021, emiliaNA, maskvalue=TRUE)
 toscanaNA <- toscana2021$tosc20m_B04 > 3000
 toscanamask <- mask(toscana2021, toscanaNA, maskvalue=TRUE)
 
-# Firme spettrali delle zone verdi in emilia: utilizzando la funzione click per puntare le zone verdi.
+####################################################################################################
+# Firme spettrali delle zone verdi in emilia: utilizzando la funzione click per puntare le zone verdi. 
 # Scelta dei punti arbitraria all'interno di zone verdi. 
+
 plotRGB(emiliamask, 4, 3 , 2, stretch="Lin") # colori naturali
 click(emiliamask, id=T, xy=T, cell=T, type="p", pch=16, col="yellow")
 
@@ -100,7 +102,7 @@ mediaRED # 357
 mediaGREEN <- (684+941+683+563+566+504)/6
 mediaGREEN # 657
 
-# Definizione delle colonne dataset versante emiliano:
+# Definizione delle colonne dataset versante toscano:
 band <- c(8,4,3)
 Toscanamedia <- c(3509,357,657)
 
@@ -112,11 +114,13 @@ ggplot(spectral, aes(x=band)) +
   geom_line(aes(y=Toscanamedia), color="blue") +
   labs(x="band",y="reflectance")
 
+# RISULTATO POCO UTILE, DIFFERENZA DELLA FIRMA SPETTRALE FRA LE VEGETAZIONI MEDIATE DI TOSCANA E EMILIA POCO APPREZZABILE, 
+# LA FIRMA DELL VEG. TOSCANA APPARE LEGGERMENTE PIù ABBASSATA, MA DATO IL PICCOLO SET DI CAMPIONI ARBITRARI CONSIDERO L'ANALISI NON AFIDABILE.
 
-# Analisi multivariata PCA
-
-#emiliarid <- aggregate(emiliamask, fact=2) # Aggrego i pixel di un fattore 2, quindi diventeranno pixel di 40x40 metri, per velocizzare i calcoli.
-#emiliarid
+###################################################################################################################
+# Analisi multivariata PCA 
+emiliarid <- aggregate(emiliamask, fact=2) # Aggrego i pixel di un fattore 2, quindi diventeranno pixel di 40x40 metri, per velocizzare i calcoli.
+emiliarid
 #plotRGB(emiliarid, 4, 3, 2, stretch="Lin")
 emiliapca <- rasterPCA(emiliamask)
 emiliapca #informazioni
@@ -156,7 +160,10 @@ plot(toscanasd, col=cl1, ylab = "latitudine", xlab = "longitudine", main = "Dev.
 #levelplot(emiliasd, main=list("Dev. St. Emilia"))
 #levelplot(toscanasd, main=list("Dev. St. Toscana"))
 
-# Maschero i corpi d'acqua perchè anche riflettono nel verde e alterano la mappa della senescing vegetation
+# Analisi PCA non presenta risultati visivimente apprezzabili, probabilmente dovuto al fatto che la risoluzione di 40x40 m è tropo bassa.
+
+########################################################################################################################
+# Maschero i corpi d'acqua perchè anche riflettono nel verde e alterano la mappa della senescing vegetation 
 # Water Bodies normalised
 
 emiliaW <- ((emiliamask$emilia20m_B02-emiliamask$emilia20m_B11)/
@@ -183,6 +190,7 @@ plot(toscanaWNA)
 toscanaWmask <- mask(toscanamask, toscanaWNA, maskvalue=TRUE)
 plot(toscanaWmask)
 
+##########################################################################################################
 # NDVI (Normalised difference vegetation index)
 
 emiliaNDVI <- ((emiliaWmask$emilia20m_B8A-emiliaWmask$emilia20m_B04)/(emiliaWmask$emilia20m_B8A+emiliaWmask$emilia20m_B04))
@@ -204,6 +212,7 @@ par(mfrow=c(1,2))
 plot(emiliaNDVIsd, col=cl1, main="Variabilità NDVI Emilia", ylab="Latitudine", xlab="Longitudine")
 plot(toscanaNDVIsd, col=cl1, main="Variabilità NDVI Toscana", ylab="Latitudine", xlab="Longitudine")
 
+#########################################################################################################################
 # Senescing Vegetation normalised (vegetazione invecchiata o malata, poco produttiva di clorofilla)
 # Banda 3 (green) riflette meno nella vegetazione vecchia o malata, per cui valori più alti di Senescing Vegetation indicano una pianta più vecchia.
 
@@ -220,6 +229,7 @@ toscanaSENVEGviridis <- ggplot() +
   ggtitle("Senescing vegetation toscana by viridis colours")
 grid.arrange(emiliaSENVEGviridis, toscanaSENVEGviridis, nrow=1, ncol=2)
 
+#################################################################################################################################
 # PULIZIA ESTREMI NDVI E SEN VEG
 
 # Tolgo la parte di mappa con valori di NDVI inferiori a 0.8 così da ottenere solo la parte più vegetata
@@ -233,7 +243,8 @@ toscanaSENVEG [toscanaSENVEG < +0.7] <- NA
 emiliaSENVEG [emiliaSENVEG > 0.85] <- NA
 toscanaSENVEG [toscanaSENVEG > 0.85] <- NA  # Esprimo solo la vegetazione vera e propria (compreso anche campi verdi data la risoluzione di 20x20m)
 
-# differenza vegetazione, considerando il dato NDVI come "contenuto di vegetazione in generale" data la , si può stimare quanta è giovane e sana
+################################################################################################################################################################
+# DIFFERENZA INDICI (VEGETAZIONE SANA), considerando il dato NDVI come "contenuto di vegetazione in generale" data la , si può stimare quanta è giovane e sana
 # facendo la differenza fra NDVI e Senescing Vegetation, così da ottenere un risultato in cui valori bassi, ma positivi, indicano una vegetazione meno 
 # "verde" e quindi più vecchia. Valori alti, indicano una vegetazione sana.
 # Valori negativi sono attribuibili a zone non vegetate (città, campi terreni)
@@ -254,12 +265,14 @@ grid.arrange(emiliaDIFviridis, toscanaDIFviridis, nrow=1, ncol=2)
 
 # RISULTATO: LA VEGETAZIONE TOSCANA è GENERALMENTE PIù SANA E IN ENTRAMBI I CASI PIù SANA SUGLI APPENNINI.
 
+#############################################################################################################################
 # Vapore Acqueo WVP 
 
 par(mfrow=c(1,2))
 plot(emiliamask$emilia20m_WVP)
 plot(toscanamask$tosc20m_WVP)
 
+#############################################################################################################################################
 # CLASSIFICAZIONE USU DEL SUOLO
 
 set.seed(4)
