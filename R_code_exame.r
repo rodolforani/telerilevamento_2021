@@ -275,9 +275,9 @@ plot(toscanamask$tosc20m_WVP)
 #############################################################################################################################################
 # CLASSIFICAZIONE USU DEL SUOLO
 
-set.seed(4)
+set.seed(22)
 emilia_cla <- unsuperClass(emiliamask, nClasses = 3)
-set.seed(2)
+set.seed(21)
 toscana_cla <- unsuperClass(toscanamask, nClasses = 3)
 
 par(mfrow=c(1,2))
